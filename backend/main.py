@@ -1,17 +1,22 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/")
 def read_root():
-    return {"message": "FastAPI backend is running!"}
-
-class Message(BaseModel):
-    message: str
+    return {"message": "Backend is up and running"}
 
 @app.post("/chat")
-def chat_endpoint(msg: Message):
-    user_message = msg.message
-    # You can replace this with your actual model logic
-    return {"response": f"Echo: {user_message}"}
+async def chat(request: Request):
+    data = await request.json()
+    user_message = data.get("message", "")
+    
+    return {"response": f"You said: {user_message}"}
