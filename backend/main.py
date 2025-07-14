@@ -21,7 +21,7 @@ def read_root():
 class Message(BaseModel):
     message: str
 
-generator = pipeline("text-generation", model="distilgpt2")
+generator = pipeline("text-generation", model="sshleifer/tiny-gpt2")
 
 @app.post("/chat")
 def chat(msg: Message):
